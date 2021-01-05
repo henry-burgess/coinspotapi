@@ -35,10 +35,10 @@ export class CoinSpot {
       path: path,
       headers: {
         'Content-Type': 'application/json',
-        'sign': auth.sign,
-        'key': auth.key,
-      }
-    }
+        sign: auth.sign,
+        key: auth.key,
+      },
+    };
   }
 
   execute(auth: any, path: string, method: string, callback: Function) {
@@ -83,14 +83,13 @@ export class CoinSpot {
    * @param callback function
    */
   latest(coin = 'btc', callback: Function) {
-    this.execute(this.authenticator, PATHS.LATEST, GET, (e: string, res: string) => {
+    let auth = this.authenticator.signature({});
+    this.execute(auth, PATHS.LATEST, GET, (e: string, res: string) => {
       if (e !== null) {
         console.error(e);
       } else {
         let data = JSON.parse(res);
-        console.log(data);
-        console.log(coin);
-        callback(data);
+        callback(data[coin]);
       }
     });
   }

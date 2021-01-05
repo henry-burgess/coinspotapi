@@ -27,6 +27,6 @@ export class Authenticator {
       key: this.key,
       body: body,
       sign: signed.digest('hex'),
-    }
+    };
   }
 }
