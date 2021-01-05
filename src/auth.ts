@@ -1,8 +1,8 @@
 import { createHmac } from 'crypto';
 
 export class Authenticator {
-  private key;
-  private secret;
+  private key: string;
+  private secret: string;
 
   constructor(key: string, secret: string) {
     this.key = key;
@@ -26,7 +26,7 @@ export class Authenticator {
     return {
       key: this.key,
       body: body,
-      signature: signed.digest('hex'),
+      sign: signed.digest('hex'),
     }
   }
 }
