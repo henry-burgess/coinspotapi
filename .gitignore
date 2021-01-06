@@ -2,6 +2,7 @@
 .DS_Store
 node_modules
 dist
+.idea/
 
 # Exclude personal tests that have my public and secret API keys
 test/**.private.**.ts

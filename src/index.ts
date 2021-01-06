@@ -8,6 +8,7 @@ const HOST = 'www.coinspot.com.au';
 
 const PATHS = {
   BALANCES: '/api/my/balances',
+  ORDERS: '/api/orders',
   LATEST: 'https://www.coinspot.com.au/pubapi/latest',
 };
 
@@ -35,7 +36,7 @@ export class CoinSpot {
    * @param path request path
    * @param method request method (POST, GET)
    */
-  private generateOptions(auth: any, path: string, method: string) {
+  private static generateOptions(auth: any, path: string, method: string) {
     return {
       rejectUnauthorized: false,
       method: method,
@@ -63,7 +64,7 @@ export class CoinSpot {
     method: string,
     callback: (error: any, data: string) => void
   ) {
-    let options = this.generateOptions(auth, path, method);
+    let options = CoinSpot.generateOptions(auth, path, method);
     let req = request(options, function(res) {
       let data = '';
       res.on('data', (chunk: string) => {
@@ -111,6 +112,25 @@ export class CoinSpot {
   latest(coin = 'btc', callback: (data: any) => void) {
     let auth = this.authenticator.signature({});
     this.execute(auth, PATHS.LATEST, GET, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data[coin]);
+      }
+    });
+  }
+
+  /**
+   * Get any open orders pertaining to a coin
+   * @param coin id of the coin to check for orders
+   * @param callback function
+   */
+  openOrders(coin = 'btc', callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+    });
+    this.execute(auth, PATHS.ORDERS, POST, (e: string, res: string) => {
       if (e !== null) {
         console.error(e);
       } else {
