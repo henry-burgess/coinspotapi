@@ -13,6 +13,11 @@ const PATHS = {
   ORDER_HISTORY: '/api/orders/history',
   QUICK_BUY: '/api/quote/buy',
   QUICK_SELL: '/api/quote/sell',
+  MY_ORDERS: '/api/my/orders',
+  PLACE_BUY: '/api/my/buy',
+  PLACE_SELL: '/api/my/sell',
+  CANCEL_BUY: '/api/my/buy/cancel',
+  CANCEL_SELL: '/api/my/sell/cancel',
   DEPOSIT_COINS: '/api/my/coin/deposit',
 };
 
@@ -191,7 +196,7 @@ export class CoinSpot {
   quickBuy(coin = 'btc', amount: number, callback: (data: any) => void) {
     let auth = this.authenticator.signature({
       cointype: coin,
-      amount: amount
+      amount: amount,
     });
     this.execute(auth, PATHS.QUICK_BUY, POST, (e: string, res: string) => {
       if (e !== null) {
@@ -212,9 +217,109 @@ export class CoinSpot {
   quickSell(coin = 'btc', amount: number, callback: (data: any) => void) {
     let auth = this.authenticator.signature({
       cointype: coin,
-      amount: amount
+      amount: amount,
     });
     this.execute(auth, PATHS.QUICK_SELL, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * Get all orders of CoinSpot account
+   * @param callback function
+   */
+  myOrders(callback: (data: any) => void) {
+    let auth = this.authenticator.signature({});
+    this.execute(auth, PATHS.MY_ORDERS, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * Place a buy order for a coin at a specific rate
+   * @param coin id of the coin to buy
+   * @param amount amount of the coin to buy
+   * @param rate desired AUD rate of the coin to buy
+   * @param callback function
+   */
+  placeBuy(coin = 'btc', amount: number, rate: number, callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+      amount: amount,
+      rate: rate,
+    });
+    this.execute(auth, PATHS.PLACE_BUY, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * Place a sell order for a coin at a specific rate
+   * @param coin id of the coin to sell
+   * @param amount amount of the coin to sell
+   * @param rate desired AUD rate of the coin to sell
+   * @param callback callback
+   */
+  placeSell(coin = 'btc', amount: number, rate: number, callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+      amount: amount,
+      rate: rate,
+    });
+    this.execute(auth, PATHS.PLACE_SELL, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * Cancel a buy order
+   * @param id buy order to cancel
+   * @param callback function
+   */
+  cancelBuy(id: any, callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      id: id
+    });
+    this.execute(auth, PATHS.CANCEL_BUY, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * Cancel a sell order
+   * @param id sell order to cancel
+   * @param callback function
+   */
+  cancelSell(id: any, callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      id: id
+    });
+    this.execute(auth, PATHS.CANCEL_SELL, POST, (e: string, res: string) => {
       if (e !== null) {
         console.error(e);
       } else {
