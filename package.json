@@ -33,6 +33,9 @@
   },
   "name": "coinspotapi",
   "author": "Henry Burgess",
+  "publishConfig": {
+    "access": "public"
+  },
   "module": "dist/coinspotapi.esm.js",
   "size-limit": [
     {
