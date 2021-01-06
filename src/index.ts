@@ -9,6 +9,7 @@ const HOST = 'www.coinspot.com.au';
 const PATHS = {
   BALANCES: '/api/my/balances',
   ORDERS: '/api/orders',
+  ORDER_HISTORY: '/api/orders/history',
   LATEST: 'https://www.coinspot.com.au/pubapi/latest',
 };
 
@@ -131,6 +132,25 @@ export class CoinSpot {
       cointype: coin,
     });
     this.execute(auth, PATHS.ORDERS, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data[coin]);
+      }
+    });
+  }
+
+  /**
+   * Get the order history pertaining to a coin
+   * @param coin id of the coin to check order history
+   * @param callback function
+   */
+  orderHistory(coin = 'btc', callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+    });
+    this.execute(auth, PATHS.ORDER_HISTORY, POST, (e: string, res: string) => {
       if (e !== null) {
         console.error(e);
       } else {
