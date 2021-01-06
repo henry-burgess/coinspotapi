@@ -1,103 +1,81 @@
-# TSDX User Guide
+# coinspotapi
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+[![GitHub issues](https://img.shields.io/github/issues/henry-burgess/coinspotapi)](https://github.com/henry-burgess/coinspotapi/issues)
+[![GitHub stars](https://img.shields.io/github/stars/henry-burgess/coinspotapi)](https://github.com/henry-burgess/coinspotapi/stargazers)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/henry-burgess/coinspotapi/CI)
 
-> This TSDX setup is meant for developing libraries (not apps!) that can be published to NPM. If you’re looking to build a Node app, you could use `ts-node-dev`, plain `ts-node`, or simple `tsc`.
+This package provides an updated and easy-to-use way of interacting with the [CoinSpot](https://www.coinspot.com.au/) API.
 
-> If you’re new to TypeScript, checkout [this handy cheatsheet](https://devhints.io/typescript)
+Setup and installation is simple, all you need is your API key and secret from CoinSpot.
 
-## Commands
+## Installation
 
-TSDX scaffolds your new library inside `/src`.
+*coinspotapi* requires Node.js to be installed on your system.
 
-To run TSDX, use:
+Once installed, run:
 
 ```bash
-npm start # or yarn start
+> npm i coinspotapi
 ```
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
+## Example usage
 
-To do a one-off build, use `npm run build` or `yarn build`.
+To use *coinspotapi* in your project, all you need to get started is a few lines of code:
 
-To run tests, use `npm test` or `yarn test`.
-
-## Configuration
-
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`.
-
-### Bundle Analysis
-
-[`size-limit`](https://github.com/ai/size-limit) is set up to calculate the real cost of your library with `npm run size` and visualize the bundle with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
+```javascript
+// index.js
+const CoinSpot = require('coinspotapi');
+const client = new CoinSpot('key', 'secret');
 ```
 
-### Rollup
+Ensure to replace `'key'` and `'secret'` with your own CoinSpot API key and secret. **Warning!** Keep wary of publishing this file publically, or at least take precautions to exclude any files which contain at least your secret key.
 
-TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
+## Supported requests
 
-### TypeScript
+The complete API documentation for CoinSpot can be found [here](https://www.coinspot.com.au/api). At this stage, only a few requests are currently supported, but I plan to finish the remaining requests soon, as well as add a few extra ones that make life easier.
 
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
+### Balance
 
-## Continuous Integration
+Allows you to check the balance of a specific asset in your portfolio. Will default to `0` if none is present. Balances are returned in AUD.
 
-### GitHub Actions
+Method signature:
+```typescript
+CoinSpot.balance('coin ID', callback);
+```
 
-Two actions are added by default:
+Example usage:
+```typescript
+CoinSpot.balance('eth', (res: number) => {
+  console.log(res);
+});
+```
 
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
+Example usage output:
+```typescript
+34.59
+```
 
-## Optimizations
+### Latest
 
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
+Allows you to check the latest pricing data of any coin on CoinSpot. Returns an object containing the bid price, the asking price, and the last sold price.
 
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
+Method signature:
+```typescript
+CoinSpot.latest('coin ID', callback);
+```
 
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
+Example usage:
+```typescript
+CoinSpot.latest('btc', (data: any) => {
+  console.log(data);
+});
+```
+
+Example usage output:
+```typescript
+{
+  bid: '40000.00',
+  ask: '43230.1234',
+  last: '43210.1234',
 }
 ```
-
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
-
-## Module Formats
-
-CJS, ESModules, and UMD module formats are supported.
-
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
-
-## Named Exports
-
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
-
-## Including Styles
-
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
-
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
-
-## Publishing to NPM
-
-We recommend using [np](https://github.com/sindresorhus/np).

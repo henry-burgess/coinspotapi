@@ -14,6 +14,9 @@ const PATHS = {
 // const BALANCE_LENGTH = 8;
 // const VALUE_LENGTH = 3;
 
+/**
+ * Main class to handle API queries.
+ */
 export class CoinSpot {
   private key: string;
   private secret: string;
@@ -26,7 +29,13 @@ export class CoinSpot {
     this.authenticator = new Authenticator(this.key, this.secret);
   }
 
-  generateOptions(auth: any, path: string, method: string) {
+  /**
+   * Generate the request options
+   * @param auth authentication information
+   * @param path request path
+   * @param method request method (POST, GET)
+   */
+  private generateOptions(auth: any, path: string, method: string) {
     return {
       rejectUnauthorized: false,
       method: method,
@@ -41,7 +50,19 @@ export class CoinSpot {
     };
   }
 
-  execute(auth: any, path: string, method: string, callback: Function) {
+  /**
+   * Execute an API query
+   * @param auth authentication information
+   * @param path request path
+   * @param method request method (POST, GET)
+   * @param callback function executed at completion of request
+   */
+  private execute(
+    auth: any,
+    path: string,
+    method: string,
+    callback: (error: any, data: string) => void
+  ) {
     let options = this.generateOptions(auth, path, method);
     let req = request(options, function(res) {
       let data = '';
@@ -61,7 +82,12 @@ export class CoinSpot {
     req.end();
   }
 
-  balance(coin = 'btc', callback: Function) {
+  /**
+   * Get the balance of a coin in your account
+   * @param coin id of the coin to check
+   * @param callback function executed receiving the balance of the coin
+   */
+  balance(coin = 'btc', callback: (balance: number) => void) {
     let auth = this.authenticator.signature({});
     this.execute(auth, PATHS.BALANCES, POST, (e: string, res: string) => {
       if (e !== null) {
@@ -82,7 +108,7 @@ export class CoinSpot {
    * @param coin id of the coin to check
    * @param callback function
    */
-  latest(coin = 'btc', callback: Function) {
+  latest(coin = 'btc', callback: (data: any) => void) {
     let auth = this.authenticator.signature({});
     this.execute(auth, PATHS.LATEST, GET, (e: string, res: string) => {
       if (e !== null) {
