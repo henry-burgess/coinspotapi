@@ -125,7 +125,7 @@ export class CoinSpot {
         console.error(e);
       } else {
         let data = JSON.parse(res);
-        callback(data[coin]);
+        callback(data.prices[coin]);
       }
     });
   }
@@ -144,7 +144,7 @@ export class CoinSpot {
         console.error(e);
       } else {
         let data = JSON.parse(res);
-        callback(data[coin]);
+        callback(data);
       }
     });
   }
@@ -230,7 +230,7 @@ export class CoinSpot {
   }
 
   /**
-   * Get all orders of CoinSpot account
+   * Get all buy & sell orders of CoinSpot account
    * @param callback function
    */
   myOrders(callback: (data: any) => void) {

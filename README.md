@@ -12,10 +12,10 @@ Setup and installation is simple, all you need is your API key and secret from C
 
 *coinspotapi* requires Node.js to be installed on your system.
 
-Once installed, run:
+Once Node.js is installed, run:
 
 ```bash
-> npm i coinspotapi
+npm i @henryburgess/coinspotapi
 ```
 
 ## Example usage
@@ -34,14 +34,14 @@ Ensure to replace `'key'` and `'secret'` with your own CoinSpot API key and secr
 
 The complete API documentation for CoinSpot can be found [here](https://www.coinspot.com.au/api). At this stage, most requests are currently supported, but I plan to finish the remaining requests soon, as well as add a few extra ones that make life easier.
 
-* `balance(coin, callback(bal))`: Get the balance of a coin in your account
-* `latest(coin, callback(data))`: Get the pricing data of a coin in your account
+* `balance(coin, callback(balance))`: Get the balance of a coin in your account
+* `latest(coin, callback(data))`: Get the pricing data of a coin
 * `openOrders(coin, callback(data))`: Get any open orders pertaining to a coin
 * `orderHistory(coin, callback(data))`: Get the order history pertaining to a coin
 * `depositCoins(coin, callback(data))`: Get the deposit information for a coin, e.g. your Bitcoin address
 * `quickBuy(coin, amount, callback(data))`: List a quick buy order
 * `quickSell(coin, amount, callback(data))`: List a quick sell order
-* `myOrders(callback(data))`: Get all orders in your account
+* `myOrders(callback(data))`: Get all buy & sell orders in your account
 * `placeBuy(coin, amount, rate, callback(data))`: Place a buy order for a coin at a specific rate
 * `placeCell(coin, amount, rate, callback(data))`: Place a sell order for a coin at a specific rate
 * `cancelBuy(id, callback(data))`: Cancel an active buy order
