@@ -7,10 +7,13 @@ const POST = 'POST';
 const HOST = 'www.coinspot.com.au';
 
 const PATHS = {
+  LATEST: 'https://www.coinspot.com.au/pubapi/latest',
   BALANCES: '/api/my/balances',
   ORDERS: '/api/orders',
   ORDER_HISTORY: '/api/orders/history',
-  LATEST: 'https://www.coinspot.com.au/pubapi/latest',
+  QUICK_BUY: '/api/quote/buy',
+  QUICK_SELL: '/api/quote/sell',
+  DEPOSIT_COINS: '/api/my/coin/deposit',
 };
 
 // const BALANCE_LENGTH = 8;
@@ -156,6 +159,67 @@ export class CoinSpot {
       } else {
         let data = JSON.parse(res);
         callback(data[coin]);
+      }
+    });
+  }
+
+  /**
+   * Get the deposit information for a coin
+   * @param coin id of the coin to deposit
+   * @param callback function
+   */
+  depositCoins(coin = 'btc', callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+    });
+    this.execute(auth, PATHS.DEPOSIT_COINS, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * List a quick buy order
+   * @param coin id of the coin to buy
+   * @param amount amount of the coin to buy
+   * @param callback function
+   */
+  quickBuy(coin = 'btc', amount: number, callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+      amount: amount
+    });
+    this.execute(auth, PATHS.QUICK_BUY, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
+      }
+    });
+  }
+
+  /**
+   * List a quick sell order
+   * @param coin id of the coin to sell
+   * @param amount amount of the coin to sell
+   * @param callback function
+   */
+  quickSell(coin = 'btc', amount: number, callback: (data: any) => void) {
+    let auth = this.authenticator.signature({
+      cointype: coin,
+      amount: amount
+    });
+    this.execute(auth, PATHS.QUICK_SELL, POST, (e: string, res: string) => {
+      if (e !== null) {
+        console.error(e);
+      } else {
+        let data = JSON.parse(res);
+        callback(data);
       }
     });
   }
