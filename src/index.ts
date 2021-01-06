@@ -252,7 +252,12 @@ export class CoinSpot {
    * @param rate desired AUD rate of the coin to buy
    * @param callback function
    */
-  placeBuy(coin = 'btc', amount: number, rate: number, callback: (data: any) => void) {
+  placeBuy(
+    coin = 'btc',
+    amount: number,
+    rate: number,
+    callback: (data: any) => void
+  ) {
     let auth = this.authenticator.signature({
       cointype: coin,
       amount: amount,
@@ -275,7 +280,12 @@ export class CoinSpot {
    * @param rate desired AUD rate of the coin to sell
    * @param callback callback
    */
-  placeSell(coin = 'btc', amount: number, rate: number, callback: (data: any) => void) {
+  placeSell(
+    coin = 'btc',
+    amount: number,
+    rate: number,
+    callback: (data: any) => void
+  ) {
     let auth = this.authenticator.signature({
       cointype: coin,
       amount: amount,
@@ -298,7 +308,7 @@ export class CoinSpot {
    */
   cancelBuy(id: any, callback: (data: any) => void) {
     let auth = this.authenticator.signature({
-      id: id
+      id: id,
     });
     this.execute(auth, PATHS.CANCEL_BUY, POST, (e: string, res: string) => {
       if (e !== null) {
@@ -317,7 +327,7 @@ export class CoinSpot {
    */
   cancelSell(id: any, callback: (data: any) => void) {
     let auth = this.authenticator.signature({
-      id: id
+      id: id,
     });
     this.execute(auth, PATHS.CANCEL_SELL, POST, (e: string, res: string) => {
       if (e !== null) {
