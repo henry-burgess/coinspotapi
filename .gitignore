@@ -6,3 +6,4 @@ dist
 
 # Exclude personal tests that have my public and secret API keys
 test/**.private.**.ts
+test/package/

@@ -21,9 +21,6 @@ const PATHS = {
   DEPOSIT_COINS: '/api/my/coin/deposit',
 };
 
-// const BALANCE_LENGTH = 8;
-// const VALUE_LENGTH = 3;
-
 /**
  * Main class to handle API queries.
  */
@@ -150,8 +147,8 @@ export class CoinSpot {
   }
 
   /**
-   * Get the order history pertaining to a coin
-   * @param coin id of the coin to check order history
+   * Get the order history of a specific coin
+   * @param coin id of the coin to retrieve history
    * @param callback function
    */
   orderHistory(coin = 'btc', callback: (data: any) => void) {
@@ -163,7 +160,7 @@ export class CoinSpot {
         console.error(e);
       } else {
         let data = JSON.parse(res);
-        callback(data[coin]);
+        callback(data);
       }
     });
   }
